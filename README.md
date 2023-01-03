@@ -1,6 +1,7 @@
 # Movierulz Unofficial Api
 
 <h4 align="center">
+![Simple Api to fetch data from movierulz website](https://res.cloudinary.com/yss-projects/image/upload/v1672757938/carbon_1_gcxzz3.png "Simple Api to fetch data from movierulz website")
 Simple Api to fetch data from movierulz website.
 </h4>
 
