@@ -1,8 +1,12 @@
 import requests
 from flask import *
+from flask_cors import CORS
 from bs4 import BeautifulSoup
 
+
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 def get_page(url):
     req = requests.get(url).content
