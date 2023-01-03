@@ -2,7 +2,7 @@
 
 <h4 align="center">
 <br>
-<img src="[https://telegra.ph/file/3f4ec4d689573bd4de154.png](https://res.cloudinary.com/yss-projects/image/upload/v1672757938/carbon_1_gcxzz3.png)" alt="Jiosaavn API" width="300">
+<img src="https://res.cloudinary.com/yss-projects/image/upload/v1672757938/carbon_1_gcxzz3.png" alt="LOGO" width="300">
 <br>
 Simple Api to fetch data from movierulz website.
 </h4>
