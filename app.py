@@ -40,8 +40,8 @@ def get_movie(url):
         if p.find("strong"):
             if "Watch Online –" in p.find("strong").text:
                 typ = p.find("strong").text.split("–")[-1]
-                url = p.find("a")['href']
-                data = {"type":typ,"url":url}
+                lin = p.find("a")['href']
+                data = {"type":typ,"url":lin}
                 other_links.append(data)
     data = {"status":True,"url":url,"title":title,"description":description,"image":image,"torrent":torrent,"other_links":other_links}
     return data
