@@ -50,7 +50,7 @@ def get_movie(url):
 @app.route("/search",methods=["GET"])
 def search():
     a = request.args.get("query")
-    url = f"https://5movierulz.ws/?s={a}"
+    url = f"https://ww2.5movierulz.wf/?s={a}"
     try:
         data = get_page(url)
         total = len(data)
@@ -62,15 +62,15 @@ def search():
 @app.route("/<language>")
 def get_home(language):
     if language == "telugu":
-        url = "https://5movierulz.ws/telugu-movie/"
+        url = "https://ww2.5movierulz.wf/telugu-movie/"
     elif language == "hindi":
-        url = "https://5movierulz.ws/bollywood-movie-free/"
+        url = "https://ww2.5movierulz.wf/bollywood-movie-free/"
     elif language == "tamil":
-        url = "https://5movierulz.ws/tamil-movie-free/"
+        url = "https://ww2.5movierulz.wf/tamil-movie-free/"
     elif language == "malayalam":
-        url = "https://5movierulz.ws/malayalam-movie-online/"
+        url = "https://ww2.5movierulz.wf/malayalam-movie-online/"
     elif language == "english":
-        url = "https://5movierulz.ws/category/hollywood-movie-2021/"
+        url = "https://ww2.5movierulz.wf/category/hollywood-movie-2021/"
     else:
         url = None
     if url != None:
@@ -83,7 +83,7 @@ def get_home(language):
 
 @app.route("/")
 def home():
-    url = "https://5movierulz.ws/"
+    url = "https://ww2.5movierulz.wf/"
     data = get_page(url)
     total = len(data)
     main_data = {"status":True,"total_found":total,"url":url,"data":data}
