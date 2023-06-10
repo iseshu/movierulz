@@ -21,9 +21,6 @@ def get_page(url):
         data.append(dat)
     return data
 
-import re
-import requests
-from bs4 import BeautifulSoup
 def get_movie(url):
     req = requests.get(url).content
     soup = BeautifulSoup(req,"html.parser")
@@ -45,7 +42,7 @@ def get_movie(url):
     for p in ps:
         if p.find("strong"):
             if "Watch Online –" in p.find("strong").text:
-                typ = p.find("strong").text.split("–")[-1]
+                typ = p.find("strong").text.split("–")[-1].replace(" ","")
                 if "all" in typ.lower():
                     lin = p.find("a")['href']
                     req = requests.get(lin).text
@@ -55,7 +52,8 @@ def get_movie(url):
                     for op in p_s:
                         if op.find("strong") and op.find("a"):
                             lin = op.find("a")['href']
-                            typ = op.find("strong").text.split("–")[-1]
+                            typ = op.find("strong").text.split("–")[-1].replace(" ","")
+                            data = {"type":typ,"url":lin}
                             other_links.append(data)
                 else:
                     lin = p.find("a")['href']
