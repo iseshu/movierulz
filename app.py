@@ -43,18 +43,21 @@ def get_movie(url):
         if p.find("strong"):
             if "Watch Online –" in p.find("strong").text:
                 typ = p.find("strong").text.split("–")[-1].replace(" ","")
-                if "all" in typ.lower():
-                    lin = p.find("a")['href']
-                    req = requests.get(lin).text
-                    soup = BeautifulSoup(req,'html.parser')
-                    div = soup.find("div",class_="entry-content wp-block-post-content has-global-padding is-layout-constrained")
-                    p_s = div.find_all("p")
-                    for op in p_s:
-                        if op.find("strong") and op.find("a"):
-                            lin = op.find("a")['href']
-                            typ = op.find("strong").text.split("–")[-1].replace(" ","")
-                            data = {"type":typ,"url":lin}
-                            other_links.append(data)
+                try:
+                    if "all" in typ.lower():
+                        lin = p.find("a")['href']
+                        req = requests.get(lin).text
+                        soup = BeautifulSoup(req,'html.parser')
+                        div = soup.find("div",class_="entry-content wp-block-post-content has-global-padding is-layout-constrained")
+                        p_s = div.find_all("p")
+                        for op in p_s:
+                            if op.find("strong") and op.find("a"):
+                                lin = op.find("a")['href']
+                                typ = op.find("strong").text.split("–")[-1].replace(" ","")
+                                data = {"type":typ,"url":lin}
+                                other_links.append(data)
+                except:
+                    pass
                 else:
                     lin = p.find("a")['href']
                     data = {"type":typ,"url":lin}
@@ -67,7 +70,7 @@ def get_movie(url):
 @app.route("/search",methods=["GET"])
 def search():
     a = request.args.get("query")
-    url = f"https://ww2.5movierulz.wf/?s={a}"
+    url = f"https://ww3.5movierulz.so/?s={a}"
     try:
         data = get_page(url)
         total = len(data)
@@ -79,15 +82,15 @@ def search():
 @app.route("/<language>")
 def get_home(language):
     if language == "telugu":
-        url = "https://ww2.5movierulz.wf/telugu-movie/"
+        url = "https://ww3.5movierulz.so/telugu-movie/"
     elif language == "hindi":
-        url = "https://ww2.5movierulz.wf/bollywood-movie-free/"
+        url = "https://ww3.5movierulz.so/bollywood-movie-free/"
     elif language == "tamil":
-        url = "https://ww2.5movierulz.wf/tamil-movie-free/"
+        url = "https://ww3.5movierulz.so/tamil-movie-free/"
     elif language == "malayalam":
-        url = "https://ww2.5movierulz.wf/malayalam-movie-online/"
+        url = "https://ww3.5movierulz.so/malayalam-movie-online/"
     elif language == "english":
-        url = "https://ww2.5movierulz.wf/category/hollywood-movie-2021/"
+        url = "https://ww3.5movierulz.so/category/hollywood-movie-2021/"
     else:
         url = None
     if url != None:
@@ -100,7 +103,7 @@ def get_home(language):
 
 @app.route("/")
 def home():
-    url = "https://ww2.5movierulz.wf/"
+    url = "https://ww3.5movierulz.so/"
     data = get_page(url)
     total = len(data)
     main_data = {"status":True,"total_found":total,"url":url,"data":data}
