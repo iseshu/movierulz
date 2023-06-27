@@ -1,4 +1,3 @@
-import re
 import requests
 from flask import *
 from flask_cors import CORS
@@ -28,8 +27,6 @@ def get_movie(url):
     image = soup.find("img",class_="attachment-post-thumbnail size-post-thumbnail wp-post-image")['src']
     description = soup.find_all("p")[4].text
     torrents = soup.find_all("a",class_="mv_button_css")
-    pre_tag = soup.find("pre")
-    screenshots = re.findall(r'https?://[^\s]+', pre_tag.text)
     torrent = []
     other_links = []
     for tor in torrents:
@@ -42,29 +39,12 @@ def get_movie(url):
     for p in ps:
         if p.find("strong"):
             if "Watch Online –" in p.find("strong").text:
-                typ = p.find("strong").text.split("–")[-1].replace(" ","")
-                try:
-                    if "all" in typ.lower():
-                        lin = p.find("a")['href']
-                        req = requests.get(lin).text
-                        soup = BeautifulSoup(req,'html.parser')
-                        div = soup.find("div",class_="entry-content wp-block-post-content has-global-padding is-layout-constrained")
-                        p_s = div.find_all("p")
-                        for op in p_s:
-                            if op.find("strong") and op.find("a"):
-                                lin = op.find("a")['href']
-                                typ = op.find("strong").text.split("–")[-1].replace(" ","")
-                                data = {"type":typ,"url":lin}
-                                other_links.append(data)
-                except:
-                    pass
-                else:
-                    lin = p.find("a")['href']
-                    data = {"type":typ,"url":lin}
-                    other_links.append(data)
-    data = {"status":True,"url":url,"title":title,"description":description,"screenshots":screenshots,"image":image,"torrent":torrent,"other_links":other_links}
+                typ = p.find("strong").text.split("–")[-1]
+                lin = p.find("a")['href']
+                data = {"type":typ,"url":lin}
+                other_links.append(data)
+    data = {"status":True,"url":url,"title":title,"description":description,"image":image,"torrent":torrent,"other_links":other_links}
     return data
-
 
 
 @app.route("/search",methods=["GET"])
