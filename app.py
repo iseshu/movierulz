@@ -7,8 +7,14 @@ from bs4 import BeautifulSoup
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
+def scape_link(url:str)->str:
+    req = requests.get(url).content
+    soup = BeautifulSoup(req,"html.parser")
+    link = soup.find("a",{"class":"main-button dlbutton"})['href']
+    return link
 
-def get_page(url):
+
+def get_page(url:str)->list:
     req = requests.get(url).content
     soup = BeautifulSoup(req,"html.parser")
     divs = soup.find_all("div",class_="cont_display")
@@ -20,7 +26,7 @@ def get_page(url):
         data.append(dat)
     return data
 
-def get_movie(url):
+def get_movie(url:str)->dict:
     req = requests.get(url).content
     soup = BeautifulSoup(req,"html.parser")
     title = soup.find("h2",class_="entry-title").text.replace("Full Movie Watch Online Free","")
@@ -41,8 +47,13 @@ def get_movie(url):
             if "Watch Online –" in p.find("strong").text:
                 typ = p.find("strong").text.split("–")[-1]
                 lin = p.find("a")['href']
-                data = {"type":typ,"url":lin}
-                other_links.append(data)
+                try:
+                    lin = scape_link(lin)
+                    data = {"type":typ,"url":lin}
+                    other_links.append(data)
+                except:
+                    data = {"type":typ,"url":lin}
+                    other_links.append(data)
     data = {"status":True,"url":url,"title":title,"description":description,"image":image,"torrent":torrent,"other_links":other_links}
     return data
 
@@ -50,7 +61,7 @@ def get_movie(url):
 @app.route("/search",methods=["GET"])
 def search():
     a = request.args.get("query")
-    url = f"https://ww3.5movierulz.so/?s={a}"
+    url = f"https://5movierulz.mov//?s={a}"
     try:
         data = get_page(url)
         total = len(data)
@@ -59,18 +70,19 @@ def search():
         main_data = main_data = {"status":False,"msg":"No Data Found"}
     return jsonify(main_data)
 
-@app.route("/<language>")
-def get_home(language):
+@app.route("/<language>/<page>")
+def get_home(language:str,page:int):
+    page = 1 if page == None else page
     if language == "telugu":
-        url = "https://ww3.5movierulz.so/telugu-movie/"
+        url = "https://5movierulz.mov//telugu-movie/page/"+str(page)
     elif language == "hindi":
-        url = "https://ww3.5movierulz.so/bollywood-movie-free/"
+        url = "https://5movierulz.mov//bollywood-movie-free/page/"+str(page)
     elif language == "tamil":
-        url = "https://ww3.5movierulz.so/tamil-movie-free/"
+        url = "https://5movierulz.mov//tamil-movie-free/page/"+str(page)
     elif language == "malayalam":
-        url = "https://ww3.5movierulz.so/malayalam-movie-online/"
+        url = "https://5movierulz.mov//malayalam-movie-online/page/"+str(page)
     elif language == "english":
-        url = "https://ww3.5movierulz.so/category/hollywood-movie-2021/"
+        url = "https://5movierulz.mov//category/hollywood-movie-2023/"
     else:
         url = None
     if url != None:
@@ -83,7 +95,7 @@ def get_home(language):
 
 @app.route("/")
 def home():
-    url = "https://ww3.5movierulz.so/"
+    url = "https://5movierulz.mov//"
     data = get_page(url)
     total = len(data)
     main_data = {"status":True,"total_found":total,"url":url,"data":data}
