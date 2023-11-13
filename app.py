@@ -11,7 +11,7 @@ def scape_link(url:str)->str:
     req = requests.get(url).content
     soup = BeautifulSoup(req,"html.parser")
     link = soup.find("a",{"class":"main-button dlbutton"})['href']
-    return link
+    return link 
 
 
 def get_page(url:str)->list:
@@ -100,6 +100,12 @@ def home():
     total = len(data)
     main_data = {"status":True,"total_found":total,"url":url,"data":data}
     return jsonify(main_data)
+
+@app.route("/fetch",methods=["GET"])
+def s():
+    a = request.args.get("url")
+    req = requests.get(a)
+    return req.content
 
 @app.route("/get",methods=["GET"])
 def get_s():
