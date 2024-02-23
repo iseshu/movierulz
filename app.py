@@ -25,7 +25,6 @@ def get_page(url:str)->list:
         dat = {"title":title['title'],"image":img['src'],"link":title['href']}
         data.append(dat)
     return data
-
 def get_movie(url:str)->dict:
     req = requests.get(url).content
     soup = BeautifulSoup(req,"html.parser")
@@ -46,14 +45,13 @@ def get_movie(url:str)->dict:
         if p.find("strong"):
             if "Watch Online –" in p.find("strong").text:
                 typ = p.find("strong").text.split("–")[-1]
-                lin = p.find("a")['href']
+                
                 try:
-                    lin = scape_link(lin)
+                    lin = p.find("a")['href']
                     data = {"type":typ,"url":lin}
                     other_links.append(data)
                 except:
-                    data = {"type":typ,"url":lin}
-                    other_links.append(data)
+                    pass
     data = {"status":True,"url":url,"title":title,"description":description,"image":image,"torrent":torrent,"other_links":other_links}
     return data
 
@@ -113,8 +111,8 @@ def get_s():
     try:
         data = get_movie(a)
         return jsonify(data)
-    except:
-        data = {"status":False,"msg":"Unable to get data"}
+    except Exception as e:
+        data = {"status":False,"msg":"Unable to get data","error":e}
         return jsonify(data)
 
 if __name__ == "__main__":
