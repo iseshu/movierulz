@@ -118,7 +118,7 @@ def get_s():
 
 @app.route("/ip")
 def getip():
-    return requests.get("https://api.ipify.org").text
+    return requests.get("https://www.5movierulz.phd").text
 
 
 if __name__ == "__main__":
