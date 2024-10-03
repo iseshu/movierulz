@@ -116,5 +116,10 @@ def get_s():
         data = {"status":False,"msg":"Unable to get data","error":e}
         return jsonify(data)
 
+@app.route("/ip")
+def getip():
+    return requests.get("https://api.ipify.org").text
+
+
 if __name__ == "__main__":
     app.run()
