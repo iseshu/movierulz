@@ -17,6 +17,7 @@ def scape_link(url:str)->str:
 def get_page(url:str)->list:
     req = requests.get(url).content
     soup = BeautifulSoup(req,"html.parser")
+    print(soup)
     divs = soup.find_all("div",class_="cont_display")
     data = []
     for i in range(2,len(divs)):
