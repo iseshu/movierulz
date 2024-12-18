@@ -116,6 +116,11 @@ async def get_s(url: str):
         data = {"status": False, "msg": "Unable to get data", "error": str(e)}
         return JSONResponse(content=data)
 
+@app.get("/ss")
+async def sse():
+    return requests.get(main_url).content
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app)
