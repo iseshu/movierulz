@@ -1,9 +1,9 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-import requests
+import cloudscraper
 from bs4 import BeautifulSoup
-
+requests = cloudscraper.create_scraper()
 app = FastAPI()
 
 app.add_middleware(
