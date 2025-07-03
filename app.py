@@ -3,6 +3,8 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import cloudscraper
 from bs4 import BeautifulSoup
+import os
+
 requests = cloudscraper.create_scraper()
 app = FastAPI()
 
@@ -13,7 +15,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 main_url = "https://cf-proxy.seshu-yarra.workers.dev"
+
 def scape_link(url: str) -> str:
     req = requests.get(url).content
     soup = BeautifulSoup(req, "html.parser")
@@ -58,12 +62,20 @@ def get_movie(url: str) -> dict:
                     other_links.append(data)
                 except:
                     pass
-    data = {"status": True, "url": url, "title": title, "description": description, "image": image, "torrent": torrent, "other_links": other_links}
+    data = {
+        "status": True,
+        "url": url,
+        "title": title,
+        "description": description,
+        "image": image,
+        "torrent": torrent,
+        "other_links": other_links
+    }
     return data
 
 @app.get("/search")
 async def search(query: str):
-    url = main_url+f"/?s={query}"
+    url = main_url + f"/?s={query}"
     try:
         data = get_page(url)
         total = len(data)
@@ -75,15 +87,15 @@ async def search(query: str):
 @app.get("/{language}/{page}")
 async def get_home(language: str, page: int = 1):
     if language == "telugu":
-        url = main_url+f"/telugu-movie/page/{page}"
+        url = main_url + f"/telugu-movie/page/{page}"
     elif language == "hindi":
-        url = main_url+f"/bollywood-movie-free/page/{page}"
+        url = main_url + f"/bollywood-movie-free/page/{page}"
     elif language == "tamil":
-        url = main_url+f"/tamil-movie-free/page/{page}"
+        url = main_url + f"/tamil-movie-free/page/{page}"
     elif language == "malayalam":
-        url = main_url+f"/malayalam-movie-online/page/{page}"
+        url = main_url + f"/malayalam-movie-online/page/{page}"
     elif language == "english":
-        url = main_url+"/category/hollywood-movie-2023/"
+        url = main_url + "/category/hollywood-movie-2023/"
     else:
         url = None
     if url:
@@ -96,7 +108,7 @@ async def get_home(language: str, page: int = 1):
 
 @app.get("/")
 async def home():
-    url = main_url+"/"
+    url = main_url + "/"
     data = get_page(url)
     total = len(data)
     main_data = {"status": True, "total_found": total, "url": url, "data": data}
@@ -120,7 +132,8 @@ async def get_s(url: str):
 async def sse():
     return requests.get(main_url).content
 
-
+# ✅ This block is fixed for Render.com
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("app:app", host="0.0.0.0", port=port)
