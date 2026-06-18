@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import cloudscraper
 from bs4 import BeautifulSoup
+import re
 requests = cloudscraper.create_scraper()
 app = FastAPI()
 
@@ -45,7 +46,7 @@ def get_movie(url: str) -> dict:
         if not p.find("strong"):
             description = p.get_text(strip=True)
             break
-    torrents = soup.find_all("a", class_="mv_button_css")
+    torrents = soup.find_all("a", href=re.compile(r'magnet:\?xt=urn:btih:[^\s"]+'))
     torrent = []
     for tor in torrents:
         link = tor.get("href")
